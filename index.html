@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HappyBears Entertainment - Official Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-main: #cecece;
+            --brand-green: #00ff41;
+            --brand-red: #ff0000;
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* Efeito de TV Antiga (Scanlines) */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Classes de visibilidade baseadas no estado */
+        .corrupted-content { display: none; }
+        
+        /* --- MODO CORROMPIDO (VISUAL GLITCH) --- */
+        body.corrupted-mode {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ctext x='10' y='50' font-family='monospace' font-weight='bold' font-size='20' fill='%23330000' transform='rotate(-20 50 50)'%3ESOU EU%3C/text%3E%3C/svg%3E");
+            background-color: #050000;
+        }
+        
+        body.corrupted-mode .normal-content { display: none !important; }
+        body.corrupted-mode .corrupted-content { display: block !important; }
+        
+        /* Glitch nas imagens */
+        body.corrupted-mode .pixel-img { 
+            border-color: red !important; 
+            filter: grayscale(100%) contrast(150%) drop-shadow(4px 4px 0 red); 
+            animation: imageShake 2s infinite;
+        }
+
+        /* Glitch no texto principal */
+        body.corrupted-mode h1, body.corrupted-mode h2, body.corrupted-mode h3 {
+            animation: textGlitch 0.3s infinite;
+            text-shadow: 2px 0 blue, -2px 0 red;
+        }
+
+        /* Container que treme */
+        body.corrupted-mode section {
+            animation: containerShake 5s infinite;
+        }
+
+        @keyframes imageShake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-2px, -2px) rotate(-1deg); }
+            20% { transform: translate(2px, 2px) rotate(1deg); }
+            30% { transform: translate(-2px, 2px) rotate(0deg); }
+            40% { transform: translate(2px, -2px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        @keyframes textGlitch {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-10deg); }
+            40% { transform: skew(10deg); }
+            60% { transform: skew(-5deg); }
+            80% { transform: skew(5deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        @keyframes containerShake {
+            0%, 100% { transform: translateX(0); }
+            95% { transform: translateX(0); }
+            96% { transform: translateX(-5px); }
+            97% { transform: translateX(5px); }
+            98% { transform: translateX(-5px); }
+            99% { transform: translateX(5px); }
+        }
+
+        /* Estilo das imagens */
+        .pixel-img {
+            image-rendering: pixelated;
+            border: 4px solid #333;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .pixel-img:hover { border-color: var(--brand-green); transform: scale(1.02); }
+
+        .bg-pattern {
+            background-image: radial-gradient(#222 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Botão da loja */
+        .btn-shop {
+            background: var(--brand-green);
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            display: inline-block;
+            margin-top: 10px;
+            border: 2px solid white;
+            width: 100%;
+            cursor: pointer;
+        }
+        .btn-shop:hover { background: white; }
+
+        body.corrupted-mode .btn-shop {
+            background: #500000;
+            color: red;
+            border-color: red;
+            cursor: not-allowed;
+            animation: pulseRed 0.5s infinite;
+        }
+
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+    </style>
+</head>
+<body class="bg-pattern" id="main-body">
+
+    <div class="scanlines"></div>
+
+    <!-- Navegação -->
+    <nav class="w-full bg-black border-b-4 border-green-800 p-4 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-center">
+            <!-- LOGO: O gatilho principal -->
+            <div id="company-logo" class="select-none cursor-help mb-4 md:mb-0 transform active:scale-95 transition-transform group">
+                <h1 class="text-3xl md:text-4xl text-green-500 font-bold uppercase tracking-widest group-hover:text-white transition-colors">
+                    HAPPYBEARS<br><span class="text-white text-xl group-hover:text-green-500 transition-colors">ENTERTAINMENT©</span>
+                </h1>
+            </div>
+            
+            <ul class="flex space-x-6 text-xl md:text-2xl text-gray-400">
+                <li><a href="#about" class="hover:text-white">Sobre</a></li>
+                <li><a href="#shop" class="hover:text-yellow-400">Loja</a></li>
+                <li><a href="#band" class="hover:text-white">Animatronics</a></li>
+                <li><a href="#careers" class="text-green-600 font-bold border border-green-600 px-2 hover:bg-green-900">VAGAS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="py-16 px-4 text-center relative overflow-hidden">
+        <div class="normal-content">
+            <h2 class="text-5xl md:text-7xl text-white mb-6 uppercase">Happybear's pizza palace</h2>
+            <p class="text-2xl text-gray-400 max-w-2xl mx-auto">
+                Venha provar nossa famosa pizza e conhecer a nova banda. Diversão garantida para toda a família!
+            </p>
+        </div>
+        <div class="corrupted-content hidden-content">
+            <h2 class="text-5xl md:text-7xl text-red-600 mb-6 uppercase glitch-text">NÃO EXISTE SAÍDA</h2>
+            <p class="text-2xl text-red-800 max-w-2xl mx-auto font-bold">
+                AINDA ESTAMOS AQUI AINDA ESTAMOS AQUI
+            </p>
+        </div>
+    </header>
+
+    <!-- Seção História EXPANDIDA -->
+    <section id="about" class="max-w-5xl mx-auto my-12 p-8 bg-gray-900 border-2 border-gray-700 relative">
+        <h3 class="text-3xl text-green-500 border-b border-gray-600 pb-2 mb-6">> SOBRE A HAPPYBEARS</h3>
+        
+        <!-- Normal -->
+        <div class="normal-content text-xl text-gray-300 leading-relaxed space-y-4">
+            <p>
+                Fundada em 1983, a HappyBears Entertainment é pioneira em entretenimento robótico. Nosso objetivo é criar memórias mágicas que duram para sempre.
+            </p>
+            <div class="bg-black/30 p-4 border-l-4 border-yellow-500">
+                <h4 class="text-yellow-500 font-bold">🏆 Prêmios de Qualidade</h4>
+                <p>Eleita a "Melhor Pizza da Família" por 3 anos consecutivos (1988-1990)! Nossos queijos são importados e nossa massa é feita fresca todos os dias.</p>
+            </div>
+            <p>
+                Após uma breve reforma para modernização em meados dos anos 80, voltamos em 1991 com o HappyBear's Pizza Palace: maior, melhor e mais seguro do que nunca! Apoiamos a comunidade local com doações frequentes para orfanatos da região.
+            </p>
+        </div>
+
+        <!-- Corrompido -->
+        <div class="corrupted-content hidden-content text-xl text-red-500 font-bold leading-relaxed bg-black p-6 border border-red-800 space-y-6">
+            <div class="border-2 border-red-900 p-2 transform rotate-1">
+                <p class="text-red-600 uppercase tracking-widest border-b border-red-900 mb-2">[RECORTE DE JORNAL - 1984]</p>
+                <p class="font-mono text-gray-400">"INVESTIGAÇÃO ENCERRADA: Polícia local não encontra evidências no porão da pizzaria, apesar dos relatos de odores fortes. O dono, Willian Miller, se recusa a comentar sobre as crianças desaparecidas."</p>
+            </div>
+
+            <ul class="list-disc pl-5 space-y-2 font-mono text-red-400">
+                <li><span class="text-red-700">1983:</span> Abertura. Primeiros testes de IA mostram hostilidade. Ignorado.</li>
+                <li><span class="text-red-700">1984:</span> Incidente das 5 Crianças. Puppet encontrada com corpo de charlotte.</li>
+                <li><span class="text-red-700">1985:</span> William Miller desaparece. Última localização: Sala Segura (parede falsa).</li>
+                <li><span class="text-red-700">1991:</span> Reabertura. Os animatronics encaram adultos. Eles lembram.</li>
+            </ul>
+            <p class="text-center text-2xl uppercase mt-4 animate-pulse">Nós não deixamos eles saírem.</p>
+        </div>
+    </section>
+
+    <!-- Seção Curiosidades -->
+    <section id="trivia" class="py-10 bg-black/50 border-y border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h3 class="text-2xl text-yellow-500 mb-6 uppercase decoration-dashed underline">Você Sabia?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Fato 1 -->
+                <div class="p-4 border border-gray-700 bg-gray-900 hover:bg-gray-800 transition-colors">
+                    <p class="normal-content text-gray-300">"O Freddy consegue cantar mais de 50 músicas diferentes em 3 idiomas!"</p>
+                    <p class="corrupted-content hidden-content text-red-500 font-mono">"A mandíbula do Freddy exerce 200kg de pressão. O suficiente para quebrar ossos."</p>
+                </div>
+                <!-- Fato 2 -->
+                <div class="p-4 border border-gray-700 bg-gray-900 hover:bg-gray-800 transition-colors">
+                    <p class="normal-content text-gray-300">"Nossas pizzas são feitas com um molho secreto da vovó HappyBear!"</p>
+                    <p class="corrupted-content hidden-content text-red-500 font-mono">"A inspeção sanitária de 84 foi subornada. O que tem na carne?"</p>
+                </div>
+                <!-- Fato 3 -->
+                <div class="p-4 border border-gray-700 bg-gray-900 hover:bg-gray-800 transition-colors">
+                    <p class="normal-content text-gray-300">"Os animatronics possuem modo livre para andar e abraçar!"</p>
+                    <p class="corrupted-content hidden-content text-red-500 font-mono">"O reconhecimento facial foi hackeado. Eles acham que você é o assassino."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: Loja de Souvenirs (Fake Shop) -->
+    <section id="shop" class="max-w-6xl mx-auto my-16 px-4">
+        <h3 class="text-center text-4xl text-pink-500 mb-10 uppercase font-bold bg-gray-900 inline-block px-4 mx-auto block border-2 border-pink-500 transform -rotate-2">
+            <span class="normal-content">🎁 Loja de Presentes</span>
+            <span class="corrupted-content hidden-content text-red-600">AINDA ESTAMOS AQUI</span>
+        </h3>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Plushie Freddy -->
+            <div class="bg-gray-800 p-4 text-center border-2 border-gray-600 shadow-lg relative overflow-hidden group">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: plushie_freddy.png) -->
+                <img src="plushie_freddy.png" 
+                     alt="Pelúcia Freddy" class="w-full h-40 object-cover mb-2 pixel-img">
+                
+                <h4 class="text-xl text-yellow-500 font-bold">Pelúcia Freddy</h4>
+                <p class="text-sm text-gray-400 normal-content h-10">O abraço mais macio da pizzaria!</p>
+                <p class="text-sm text-red-500 corrupted-content hidden-content font-mono h-10">ELE TE OBSERVA DORMIR.</p>
+                
+                <button class="btn-shop" onclick="alert('Adicionado ao carrinho!')">
+                    <span class="normal-content">$9.99 - COMPRAR</span>
+                    <span class="corrupted-content hidden-content">CORRA AGORA</span>
+                </button>
+            </div>
+
+            <!-- Plushie Bonnie -->
+            <div class="bg-gray-800 p-4 text-center border-2 border-gray-600 shadow-lg relative overflow-hidden group">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: plushie_bonnie.png) -->
+                <img src="plushie_bonnie.png" 
+                     alt="Pelúcia Bonnie" class="w-full h-40 object-cover mb-2 pixel-img">
+                
+                <h4 class="text-xl text-blue-500 font-bold">Pelúcia Bonnie</h4>
+                <p class="text-sm text-gray-400 normal-content h-10">Vem com mini-guitarra de feltro!</p>
+                <p class="text-sm text-red-500 corrupted-content hidden-content font-mono h-10">SEM ROSTO. SEM ALMA.</p>
+                
+                <button class="btn-shop" onclick="alert('Adicionado ao carrinho!')">
+                    <span class="normal-content">$9.99 - COMPRAR</span>
+                    <span class="corrupted-content hidden-content">SOCORRO</span>
+                </button>
+            </div>
+
+            <!-- Plushie Chica -->
+            <div class="bg-gray-800 p-4 text-center border-2 border-gray-600 shadow-lg relative overflow-hidden group">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: plushie_chica.png) -->
+                <img src="plushie_chica.png" 
+                     alt="Pelúcia Chica" class="w-full h-40 object-cover mb-2 pixel-img">
+                
+                <h4 class="text-xl text-yellow-300 font-bold">Pelúcia Chica</h4>
+                <p class="text-sm text-gray-400 normal-content h-10">Acompanha Cupcake magnético!</p>
+                <p class="text-sm text-red-500 corrupted-content hidden-content font-mono h-10">ESTAMOS VIVOS.</p>
+                
+                <button class="btn-shop" onclick="alert('Adicionado ao carrinho!')">
+                    <span class="normal-content">$9.99 - COMPRAR</span>
+                    <span class="corrupted-content hidden-content">NÃO TOQUE</span>
+                </button>
+            </div>
+
+            <!-- Plushie Foxy -->
+            <div class="bg-gray-800 p-4 text-center border-2 border-gray-600 shadow-lg relative overflow-hidden group">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: plushie_foxy.png) -->
+                <img src="plushie_foxy.png" 
+                     alt="Pelúcia Foxy" class="w-full h-40 object-cover mb-2 pixel-img">
+                
+                <h4 class="text-xl text-red-500 font-bold">Pelúcia Foxy</h4>
+                <p class="text-sm text-gray-400 normal-content h-10">Edição limitada Pirata!</p>
+                <p class="text-sm text-red-500 corrupted-content hidden-content font-mono h-10">FORA DE SERVIÇO.</p>
+                
+                <button class="btn-shop" onclick="alert('Adicionado ao carrinho!')">
+                    <span class="normal-content">$9.99 - COMPRAR</span>
+                    <span class="corrupted-content hidden-content">MORTE</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: A Banda (Com segredos dependentes do modo) -->
+    <section id="band" class="max-w-6xl mx-auto my-16 px-4">
+        <h3 class="text-center text-4xl text-white mb-10 uppercase decoration-wavy underline decoration-green-600">Nossos Astros</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Freddy Card -->
+            <div class="bg-gray-800 p-4 text-center group relative">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: freddy.png) -->
+                <img src="freddy.png" 
+                     alt="Freddy" 
+                     onclick="checkSecret('freddy')"
+                     class="w-full h-64 object-cover mb-4 pixel-img">
+                <h4 class="text-3xl text-green-400 mb-2">FREDDY HAPPYBEAR</h4>
+                <div class="text-lg text-gray-400 normal-content">Líder da banda, cantor e protetor,e amigo das crianças.</div>
+                <div id="secret-freddy" class="corrupted-content hidden-content text-red-500 font-mono text-sm border border-red-900 bg-black p-2">
+                    DÓI TUDO DÓI ME AJUDE ME AJUDE"<br> EU AINDA ESTOU AQUI EU AINDA ESTOU AQUI EU AINDA ESTOU AQUI
+                </div>
+            </div>
+
+            <!-- Bonnie Card -->
+            <div class="bg-gray-800 p-4 text-center group relative">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: bonnie.png) -->
+                <img src="bonnie.png" 
+                     alt="Bonnie" 
+                     onclick="checkSecret('bonnie')"
+                     class="w-full h-64 object-cover mb-4 pixel-img">
+                <h4 class="text-3xl text-blue-400 mb-2">BONNIE BLUEBELL</h4>
+                <div class="text-lg text-gray-400 normal-content">Guitarrista radical e entregador de pizza.</div>
+                <div id="secret-bonnie" class="corrupted-content hidden-content text-red-500 font-mono text-sm border border-red-900 bg-black p-2">
+                    O traje está vazando fluidos. O cheiro é de decomposição. Ele é agressivo.
+                </div>
+            </div>
+
+            <!-- Chica Card -->
+            <div class="bg-gray-800 p-4 text-center group relative">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: chica.png) -->
+                <img src="chica.png" 
+                     alt="Chica" 
+                     onclick="checkSecret('chica')"
+                     class="w-full h-64 object-cover mb-4 pixel-img">
+                <h4 class="text-3xl text-yellow-400 mb-2">CHICA THE CHICKEN</h4>
+                <div class="text-lg text-gray-400 normal-content">Ela ama comer e compartilhar receitas!</div>
+                <div id="secret-chica" class="corrupted-content hidden-content text-red-500 font-mono text-sm border border-red-900 bg-black p-2">
+                 Ela observa os clientes do escuro. isso está afastando os clientes
+                </div>
+            </div>
+
+            <!-- Foxy Card -->
+            <div class="bg-gray-800 p-4 text-center group relative">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: foxy.png) -->
+                <img src="foxy.png" 
+                     alt="Foxy" 
+                     onclick="checkSecret('foxy')"
+                     class="w-full h-64 object-cover mb-4 pixel-img">
+                <h4 class="text-3xl text-red-600 mb-2">FOXY THE PIRATE</h4>
+                <div class="text-lg text-gray-400 normal-content">O capitão da Pirate Cove. Histórias incríveis!</div>
+                <div id="secret-foxy" class="corrupted-content hidden-content text-red-500 font-mono text-sm border border-red-900 bg-black p-2">
+                   ele está agressivo com os funcionarios e atacou um cliente recentemente
+                </div>
+            </div>
+
+            <!-- Puppet Card -->
+            <div class="bg-gray-800 p-4 text-center md:col-span-2 lg:col-span-2 lg:col-start-1 md:col-start-1 group relative">
+                <!-- SUBSTITUA src PELO NOME DA SUA IMAGEM (ex: puppet.png) -->
+                <img src="puppet.png" 
+                     alt="Puppet" 
+                     onclick="checkSecret('puppet')"
+                     class="w-full h-64 object-cover mb-4 pixel-img">
+                <h4 class="text-3xl text-white mb-2">THE PUPPET</h4>
+                <div class="text-lg text-gray-400 normal-content">Entrega presentes e cuida da segurança.</div>
+                <div id="secret-puppet" class="corrupted-content hidden-content text-red-500 font-mono text-sm border border-red-900 bg-black p-2">
+                    CONFIDENCIAL: Corpo encontrado de uma das crianças desaparecidas encontrados dentro da caixa de musica - 22/84
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Seção Emprego -->
+    <section id="careers" class="py-16 bg-green-900/20 border-t-4 border-dashed border-yellow-600 relative overflow-hidden">
+        <div class="max-w-3xl mx-auto text-center px-4 relative z-10">
+            <div class="bg-yellow-100 p-8 transform rotate-1 shadow-xl text-black">
+                <div class="normal-content">
+                    <h2 class="text-5xl md:text-6xl font-black text-black mb-4 uppercase tracking-tighter" style="font-family: sans-serif;">OPORTUNIDADE!</h2>
+                    <h3 class="text-2xl font-bold mb-4">GUARDA NOTURNO (00:00 - 06:00)</h3>
+                    <p class="text-lg mb-6 leading-tight">
+                        Venha fazer parte da família HappyBears! Ambiente seguro e divertido.
+                        <br><strong>Pagamento:</strong> $320/semana.
+                    </p>
+                </div>
+                
+                <div class="corrupted-content hidden-content">
+                    <h2 class="text-5xl md:text-6xl font-black text-red-900 mb-4 uppercase tracking-tighter font-mono">ARMADILHA MORTAL</h2>
+                    <h3 class="text-2xl font-bold mb-4 text-red-800">VOCÊ NÃO VAI SAIR VIVO</h3>
+                    <p class="text-lg mb-6 leading-tight font-bold text-red-700">
+                        Sobreviva se puder. Eles se movem no escuro. As springlocks falham.
+                    </p>
+                </div>
+
+                <a href="https://gamejolt.com/games/five-nights-in-pixels/1042468" target="_blank" class="inline-block bg-red-600 hover:bg-red-700 text-white text-3xl font-bold py-4 px-8 border-4 border-black uppercase animate-bounce shadow-lg">
+                    CANDIDATAR-SE AGORA
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black py-8 text-center text-gray-600 text-sm mt-12 border-t border-gray-900">
+        <p class="normal-content">&copy; 1991 HappyBears Entertainment. Todos os direitos reservados.</p>
+        <p class="corrupted-content hidden-content text-red-800 text-xs">IT'S ME IT'S ME IT'S ME IT'S ME IT'S ME IT'S ME</p>
+        <p>Five Nights in Pixels - Fan Game.</p>
+    </footer>
+
+    <script>
+        let logoClicks = 0;
+        let isCorrupted = false;
+        const logo = document.getElementById('company-logo');
+        const body = document.getElementById('main-body');
+
+        // Gatilho do Modo Corrompido
+        logo.addEventListener('click', () => {
+            logoClicks++;
+            
+            // Feedback visual sutil a cada clique
+            logo.style.transform = `rotate(${Math.random() * 5 - 2.5}deg)`;
+            setTimeout(() => { logo.style.transform = 'none'; }, 200);
+
+            if (logoClicks >= 3) {
+                toggleCorruptedMode();
+                logoClicks = 0; // Reseta para poder voltar ao normal se clicar mais 3 vezes
+            }
+        });
+
+        function toggleCorruptedMode() {
+            isCorrupted = !isCorrupted;
+            
+            if (isCorrupted) {
+                // Ativar modo pesadelo
+                body.classList.add('corrupted-mode');
+                console.log("SYSTEM FAILURE: CORRUPTION DETECTED");
+            } else {
+                // Voltar ao normal
+                body.classList.remove('corrupted-mode');
+            }
+        }
+
+        // Função de clique nos animatronics
+        function checkSecret(name) {
+            if (!isCorrupted) {
+                // No modo normal, apenas faz algo bonitinho
+                alert(`Conheça o ${name.toUpperCase()} na pizzaria hoje mesmo!`);
+            } else {
+                // No modo corrompido, nada acontece ao clicar na imagem
+                // Porque as informações já estão expostas no texto abaixo
+                const img = event.target;
+                img.style.filter = "invert(1)";
+                setTimeout(() => { img.style.filter = ""; }, 100);
+            }
+        }
+    </script>
+</body>
+</html>
